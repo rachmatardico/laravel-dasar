@@ -36,3 +36,30 @@ Route::get('/hello-again', function(){
 Route::get('/hello-world', function(){
     return view('hello.world', ['name' => "Rachmat"]);
 });
+
+Route::get('/products/{id}', function($productId){
+    return "Product : $productId";
+});
+
+Route::get('/products/{id}/items/{item}', function($productId, $itemId){
+    return "Product : $productId, Item : $itemId";
+});
+
+// Route Dengan Regular Expression
+Route::get('/categories/{id}', function($categoryId){
+    return "Category : $categoryId"; 
+})->where('id', '[0-9]+');
+
+// Optional Route Parameter
+Route::get('/users/{id?}', function($userId = '404'){
+    return "User : $userId";
+});
+
+// Route Conflict
+Route::get('/conflict/rachmat', function(){
+    return "Conflict : Rachmat Ardico";
+});
+
+Route::get('/conflict/{name}', function($name){
+    return "Conflict : $name";
+});
