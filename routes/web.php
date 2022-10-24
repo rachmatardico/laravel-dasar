@@ -87,3 +87,8 @@ Route::post('/input/hello/first', [InputController::class, 'helloFirstName']);
 Route::post('/input/hello/input', [InputController::class, 'helloInput']);
 Route::post('/input/hello/array', [InputController::class, 'helloArray']);
 Route::post('/input/type', [InputController::class, 'inputType']);
+
+// Request Filter Input
+Route::post('/input/filter/only', [InputController::class, 'filterOnly']);
+Route::post('/input/filter/except', [InputController::class, 'filterExcept']);
+Route::post('/input/filter/merge', [InputController::class, 'filterMerge']);
