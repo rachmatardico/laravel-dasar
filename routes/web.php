@@ -86,53 +86,75 @@ Route::get('/controller/hello/request', [HelloController::class, 'request']);
 Route::get('/controller/hello/{name}', [HelloController::class, 'hello']);
 
 // Request Input
-Route::get('/input/hello', [InputController::class, 'hello']);
-Route::post('/input/hello', [InputController::class, 'hello']);
+Route::prefix('input')->controller(InputController::class)
+    ->group(function(){
+        Route::get('hello', 'hello');
+        Route::post('hello', 'hello');
 
-Route::post('/input/hello/first', [InputController::class, 'helloFirstName']);
-Route::post('/input/hello/input', [InputController::class, 'helloInput']);
-Route::post('/input/hello/array', [InputController::class, 'helloArray']);
-Route::post('/input/type', [InputController::class, 'inputType']);
-
-// Request Filter Input
-Route::post('/input/filter/only', [InputController::class, 'filterOnly']);
-Route::post('/input/filter/except', [InputController::class, 'filterExcept']);
-Route::post('/input/filter/merge', [InputController::class, 'filterMerge']);
+        Route::prefix('hello')->group(function(){
+            Route::post('first', 'helloFirstName');
+            Route::post('input', 'helloInput');
+            Route::post('array', 'helloArray');
+        });
+        Route::post('type', 'inputType');
+        
+        // Request Filter Input
+        Route::prefix('filter')->group(function(){
+                Route::post('only', 'filterOnly');
+                Route::post('except', 'filterExcept');
+                Route::post('merge', 'filterMerge');
+        });
+});
 
 // File Upload
 Route::post('/file/upload', [FileController::class, 'upload'])
     ->withoutMiddleware([VerifyCsrfToken::class]);
 
 // Response
-Route::get('/response/hello', [ResponseController::class, 'response']);
-Route::get('/response/header', [ResponseController::class, 'header']);
-Route::get('/response/type/view', [ResponseController::class, 'responseView']);
-Route::get('/response/type/json', [ResponseController::class, 'responseJson']);
-Route::get('/response/type/file', [ResponseController::class, 'responseFile']);
-Route::get('/response/type/download', [ResponseController::class, 'responseDownload']);
+Route::prefix('response')->controller(ResponseController::class)
+    ->group(function(){
+        Route::get('hello', 'response');
+        Route::get('header', 'header');
+
+        Route::prefix('type')->group(function(){
+            Route::get('view', 'responseView');
+            Route::get('json', 'responseJson');
+            Route::get('file', 'responseFile');
+            Route::get('download', 'responseDownload');
+        });
+});
 
 // Cookie
-Route::get('/cookie/set', [CookieController::class, 'createCookie']);
-Route::get('/cookie/get', [CookieController::class, 'getCookie']);
-Route::get('/cookie/clear', [CookieController::class, 'clearCookie']);
+Route::prefix('cookie')->controller(CookieController::class)
+    ->group(function(){
+        Route::get('set', 'createCookie');
+        Route::get('get', 'getCookie');
+        Route::get('clear', 'clearCookie');
+});
 
 // Redirect
-Route::get('/redirect/from', [RedirectController::class, 'redirectFrom']);
-Route::get('/redirect/to', [RedirectController::class, 'redirectTo']);
-Route::get('/redirect/name', [RedirectController::class, 'redirectName']);
-Route::get('/redirect/name/{name}', [RedirectController::class, 'redirectHello'])
-    ->name('redirect-hello');
-Route::get('/redirect/action', [RedirectController::class, 'redirectAction']);
-Route::get('/redirect/pzn', [RedirectController::class, 'redirectAway']);
+Route::prefix('redirect')->controller(RedirectController::class)
+    ->group(function(){
+        Route::get('from', 'redirectFrom');
+        Route::get('to', 'redirectTo');
+        Route::get('name', 'redirectName');
+        Route::get('name/{name}', 'redirectHello')
+            ->name('redirect-hello');
+        Route::get('action', 'redirectAction');
+        Route::get('pzn', 'redirectAway');
+});
 
 // Middleware
-Route::get('/middleware/api', function(){
-    return "OK";
-})->middleware(['contoh:PZN,401']);
-
-Route::get('/middleware/group', function(){
-    return "GROUP";
-})->middleware(['pzn']);
+Route::middleware(['contoh:PZN,401'])->prefix('middleware')
+    ->group(function(){
+        Route::get('api', function(){
+            return "OK";
+        });
+        
+        Route::get('group', function(){
+            return "GROUP";
+        });
+});
 
 // CSRF
 Route::get('/form', [FormController::class, 'form']);
