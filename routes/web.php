@@ -9,6 +9,7 @@ use App\Http\Controllers\InputController;
 use App\Http\Controllers\RedirectController;
 use App\Http\Controllers\ResponseController;
 use App\Http\Middleware\VerifyCsrfToken;
+use Illuminate\Support\Facades\URL;
 
 /*
 |--------------------------------------------------------------------------
@@ -140,6 +141,10 @@ Route::prefix('redirect')->controller(RedirectController::class)
         Route::get('name', 'redirectName');
         Route::get('name/{name}', 'redirectHello')
             ->name('redirect-hello');
+        Route::get('/named', function(){
+            return route('redirect-hello', ['name' => 'Matt']);
+        });
+
         Route::get('action', 'redirectAction');
         Route::get('pzn', 'redirectAway');
 });
@@ -159,3 +164,14 @@ Route::middleware(['contoh:PZN,401'])->prefix('middleware')
 // CSRF
 Route::get('/form', [FormController::class, 'form']);
 Route::post('/form', [FormController::class, 'submitForm']);
+
+// URL Generation
+Route::get('/url/current', function(){
+    return URL::full();
+});
+
+Route::get('/url/action', function(){
+    // return action([FormController::class, 'form'], []);
+    // return url()->action([FormController::class, 'form'], []);
+    return URL::action([FormController::class, 'form'], []);
+});
