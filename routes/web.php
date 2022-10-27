@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\CookieController;
 use App\Http\Controllers\FileController;
+use App\Http\Controllers\FormController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HelloController;
 use App\Http\Controllers\InputController;
@@ -132,3 +133,7 @@ Route::get('/middleware/api', function(){
 Route::get('/middleware/group', function(){
     return "GROUP";
 })->middleware(['pzn']);
+
+// CSRF
+Route::get('/form', [FormController::class, 'form']);
+Route::post('/form', [FormController::class, 'submitForm']);
