@@ -199,3 +199,18 @@ Route::prefix('error')->group(function () {
         throw new ValidationException("Validation Error");
     });
 });
+
+// Http Exception
+Route::prefix('abort')->group(function () {
+    Route::get('400', function () {
+       abort(400, "Upss Validation Error"); 
+    });
+
+    Route::get('401', function () {
+       abort(401); 
+    });
+
+    Route::get('500', function () {
+        abort(500); 
+     });
+});
