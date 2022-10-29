@@ -8,6 +8,7 @@ use App\Http\Controllers\HelloController;
 use App\Http\Controllers\InputController;
 use App\Http\Controllers\RedirectController;
 use App\Http\Controllers\ResponseController;
+use App\Http\Controllers\SessionController;
 use App\Http\Middleware\VerifyCsrfToken;
 use Illuminate\Support\Facades\URL;
 
@@ -174,4 +175,10 @@ Route::get('/url/action', function(){
     // return action([FormController::class, 'form'], []);
     // return url()->action([FormController::class, 'form'], []);
     return URL::action([FormController::class, 'form'], []);
+});
+
+// Session
+Route::prefix('session')->group(function () {
+    Route::get('create', [SessionController::class, 'createSession']);
+    Route::get('get', [SessionController::class, 'getSession']);
 });
